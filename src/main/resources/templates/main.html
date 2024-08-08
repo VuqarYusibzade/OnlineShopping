@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Shopping</title>
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        h1, p {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-right: 10px;
+        }
+
+        nav ul li:last-child {
+            margin-right: 0;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            background-color: #333;
+            transition: background-color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            background-color: #555;
+        }
+
+        main {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 10px;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+
+        .product {
+            width: calc(30% - 10px);
+            margin-bottom: 2px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #fff;
+        }
+
+        .product img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 5px;
+        }
+
+        .product h2 {
+            margin-top: 0;
+            font-size: 16px;
+        }
+
+        .product button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        .product button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Online Shopping</h1>
+    <nav>
+        <ul>
+            <li><a href="main.html">Home page</a></li>
+            <li><a href="/register">Register</a></li>
+            <li><a href="/log-in">Log in</a></li>
+            <li><a href="cart.html">Basket</a></li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <!-- Ürünlerin listesi buraya eklenecek -->
+</main>
+<footer>
+    <p>vyusibzade01@gmail.com</p>
+</footer>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch("/api/users/allproduct")
+            .then(response => response.json())
+            .then(products => {
+                const productContainer = document.querySelector("main");
+                productContainer.innerHTML = "";
+
+
+                products.forEach(product => {
+                    const productElement = document.createElement("div");
+                    productElement.classList.add("product");
+
+                    const imageElement = document.createElement("img");
+                    imageElement.src = product.imageUrl;
+                    imageElement.alt = product.name;
+
+                    const nameElement = document.createElement("h2");
+                    nameElement.textContent = product.name;
+
+                    const priceElement = document.createElement("p");
+                    priceElement.textContent = "Price: $" + product.price;
+
+                    const buttonElement = document.createElement("button");
+                    buttonElement.textContent = "Add to Basket";
+
+
+                    buttonElement.addEventListener("click", function() {
+                        addToBasket(product.id);
+                    });
+
+                    productElement.appendChild(imageElement);
+                    productElement.appendChild(nameElement);
+                    productElement.appendChild(priceElement);
+                    productElement.appendChild(buttonElement);
+
+                    productContainer.appendChild(productElement);
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching products:", error);
+            });
+
+
+        function addToBasket(productId) {
+            fetch("/api/users/basket/add?userId=1&productId=" + productId, {
+                method: "POST"
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert("The product has been added to the cart!");
+                    } else {
+                        alert("First log in.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error adding product to basket:", error);
+                    alert("First log in.");
+                });
+        }
+    });
+</script>
+</body>
+</html>

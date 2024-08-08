@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Registration</title>
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            width: 100%;
+            max-width: 1200px; /* Maksimum genişlik */
+        }
+
+        .form-wrapper {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 50%;
+        }
+
+        .form-wrapper form {
+            width: 100%;
+        }
+
+        .form-wrapper h2 {
+            margin-top: 0;
+        }
+
+        .form-wrapper label,
+        .form-wrapper input {
+            width: calc(100% - 10px);
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .form-wrapper input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-wrapper input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="form-wrapper">
+        <form id="registrationForm">
+            <h2>Seller Registration</h2>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            <label for="surname">Surname:</label>
+            <input type="text" id="surname" name="surname" required>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <label for="phone">Phone:</label>
+            <input type="text" id="phone" name="phone" required>
+            <label for="voen">VOEN:</label>
+            <input type="text" id="voen" name="voen" required>
+            <h3>Address</h3>
+            <label for="street">Street:</label>
+            <input type="text" id="street" name="street" required>
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city" required>
+            <label for="postalCode">Postal Code:</label>
+            <input type="text" id="postalCode" name="postalCode" required>
+            <label for="country">Country:</label>
+            <input type="text" id="country" name="country" required><br><br>
+            <input type="submit" value="Register">
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById('registrationForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Sayfa yenilenmesini engelle
+        // Kullanıcı ve adres bilgilerini topla
+        const userData = {
+            name: document.getElementById('name').value,
+            surname: document.getElementById('surname').value,
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value,
+            phone: document.getElementById('phone').value,
+            voen: document.getElementById('voen').value
+        };
+
+        const addressData = {
+            street: document.getElementById('street').value,
+            city: document.getElementById('city').value,
+            postalCode: document.getElementById('postalCode').value,
+            country: document.getElementById('country').value
+        };
+
+        // Kullanıcı ve adres bilgilerini birleştir
+        const formData = {
+            userDto: userData,
+            addressDto: addressData
+        };
+
+        fetch('api/seller/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+            .then(response => {
+                if (response.ok) {
+                    // Başarılı kayıt durumunda doğrulama sayfasına yönlendir
+                    window.location.href = '/confirm-user';
+                } else {
+                    alert('An error occurred while registering seller.');
+                }
+            })
+            .catch(error => {
+                console.error('Error registering seller:', error);
+                alert('An error occurred while registering seller.');
+            });
+    });
+</script>
+</body>
+</html>

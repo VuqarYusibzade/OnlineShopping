@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Panel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1, h2, h3, p {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        nav {
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav ul li {
+            margin-bottom: 10px;
+        }
+
+        nav ul li a {
+            color: #333;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            background-color: #fff;
+            display: block;
+            width: 150px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            background-color: #f0f0f0;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        #productList {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #productList li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Seller Panel</h1>
+    <nav>
+        <ul>
+            <li><a href="/add-product">Add Product</a></li>
+            <li><a href="/update-product">Update Product</a></li>
+            <li><a href="delete-product.html">Delete Product</a></li>
+            <li><a href="change-password.html">Change Password</a></li>
+            <li><a href="deliver-order.html">Deliver Order</a></li>
+            <li><a href="logout.html">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <h2>Welcome, Seller!</h2>
+    <p>Manage your products, change password, and deliver orders from here.</p>
+
+    <h3>Your Products</h3>
+    <ul id="productList"></ul>
+</main>
+<footer>
+    <p>Online Alışveriş - Tüm hakları saklıdır.</p>
+    <p>İletişim: info@example.com</p>
+</footer>
+
+<script>
+
+    fetch('/api/seller/products?sellerId=1')
+        .then(response => response.json())
+        .then(products => {
+            const productList = document.getElementById('productList');
+            products.forEach(product => {
+                const li = document.createElement('li');
+                li.textContent = `${product.name} - ${product.price} - ${product.stock}`;
+                productList.appendChild(li);
+            });
+        })
+        .catch(error => console.error('Error fetching products:', error));
+</script>
+</body>
+</html>
